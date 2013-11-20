@@ -26,13 +26,13 @@ module Oculus
 
       def all_queries
         with_table do |table|
-          to_queries table.order(:id.desc)
+          to_queries table.order(:id)
         end
       end
 
       def starred_queries
         with_table do |table|
-          to_queries table.where(:starred => true).order(:id.desc)
+          to_queries table.where(:starred => true).order(:id)
         end
       end
 
