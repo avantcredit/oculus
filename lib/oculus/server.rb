@@ -1,10 +1,19 @@
+require 'rubygems'
 require 'sinatra/base'
+require 'sinatra_warden'
 require 'oculus'
 require 'oculus/presenters'
 require 'json'
 
 module Oculus
   class Server < Sinatra::Base
+
+    use Rack::Auth::Basic, "Avant Credit Oculus" do |username, password|
+      [username, password] == [(ENV['admin_name'] || 'admin'), (ENV['admin_password'] || 'dev')]
+    end
+
+#    register Sinatra::Warden
+
     set :root, File.dirname(File.expand_path(__FILE__))
 
     set :static, true
@@ -18,22 +27,26 @@ module Oculus
     end
 
     get '/' do
+      #authorize!
       erb :index
     end
 
     get '/starred' do
+      #authorize!
       @queries = Oculus.data_store.starred_queries.map { |q| Oculus::Presenters::QueryPresenter.new(q) }
 
       erb :starred
     end
 
     get '/history' do
+      #authorize!
       @queries = Oculus.data_store.all_queries.map { |q| Oculus::Presenters::QueryPresenter.new(q) }
 
       erb :history
     end
 
     post '/queries/:id/cancel' do
+      #authorize!
       query = Oculus::Query.find(params[:id])
       connection = Oculus::Connection.connect(Oculus.connection_options)
       connection.kill(query.thread_id)
@@ -41,6 +54,7 @@ module Oculus
     end
 
     post '/queries' do
+      #authorize!
       query = Oculus::Query.create(:query => params[:query])
 
       pid = fork do
@@ -55,6 +69,7 @@ module Oculus
     end
 
     get '/queries/:id.json' do
+      #authorize!
       query = Oculus::Query.find(params[:id])
 
       if query.error
@@ -65,6 +80,7 @@ module Oculus
     end
 
     get '/queries/:id' do
+      #authorize!
       @query = Oculus::Presenters::QueryPresenter.new(Oculus::Query.find(params[:id]))
 
       @headers, *@results = @query.results
@@ -73,6 +89,7 @@ module Oculus
     end
 
     get '/queries/:id/download' do
+      #authorize!
       query = Oculus::Query.find(params[:id])
       timestamp = query.started_at.strftime('%Y%m%d%H%M')
 
@@ -84,10 +101,12 @@ module Oculus
     end
 
     get '/queries/:id/status' do
+      #authorize!
       Oculus::Presenters::QueryPresenter.new(Oculus::Query.find(params[:id])).status
     end
 
     put '/queries/:id' do
+      #authorize!
       @query = Oculus::Query.find(params[:id])
       @query.name    = params[:name]              if params[:name]
       @query.author  = params[:author]            if params[:author]
@@ -98,6 +117,7 @@ module Oculus
     end
 
     delete '/queries/:id' do
+      #authorize!
       Oculus.data_store.delete_query(params[:id])
       puts "true"
     end
