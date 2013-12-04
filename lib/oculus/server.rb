@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'sinatra/base'
-require 'sinatra_warden'
 require 'oculus'
 require 'oculus/presenters'
 require 'json'
