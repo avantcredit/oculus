@@ -15,13 +15,13 @@
         <td class="status"><span class="indicator indicator-<%= query.status %>">*</span></td>
         <td class="date"><%= query.formatted_start_time %></td>
         <td>
-          <a href="/queries/<%= query.id %>"><%= query.description %></a>
+          <a href="<%= url("/queries/#{query.id}")%>"><%= query.description %></a>
         </td>
         <td class="author">
           <%= query.author %>
         </td>
         <td>
-          <a class="delete" href="/queries/<%= query.id %>"><i class="icon-remove"></i></a>
+          <a class="delete" href="<%= url("/queries/#{query.id}") %>"><i class="icon-remove"></i></a>
         </td>
       </tr>
     <% end %>

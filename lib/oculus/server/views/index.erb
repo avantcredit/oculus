@@ -1,6 +1,6 @@
 <% @current_tab = 'home' %>
 
-<form id="query-form" method="POST" action="/queries">
+<form id="query-form" method="POST" action="<%= url('/queries')%>">
   <div id="editor-container">
     <textarea name="query" id="query-field"><%= h(params[:q]) %></textarea>
   </div>
