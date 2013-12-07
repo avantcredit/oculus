@@ -7,10 +7,6 @@ require 'json'
 module Oculus
   class Server < Sinatra::Base
 
-    use Rack::Auth::Basic, "Avant Credit Oculus" do |username, password|
-      [username, password] == [(ENV['admin_name'] || 'admin'), (ENV['admin_password'] || 'dev')]
-    end
-
 #    register Sinatra::Warden
 
     set :root, File.dirname(File.expand_path(__FILE__))
