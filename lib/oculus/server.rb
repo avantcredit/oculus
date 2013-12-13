@@ -95,6 +95,13 @@ module Oculus
       query.to_csv
     end
 
+    get '/queries/:id/run' do
+      @query = Oculus::Query.find(params[:id])
+      connection = Oculus::Connection.connect(Oculus.connection_options)
+      @query.execute(connection)
+      redirect to("/queries/#{@query.id}/status")
+    end
+
     get '/queries/:id/status' do
       #authorize!
       Oculus::Presenters::QueryPresenter.new(Oculus::Query.find(params[:id])).status
