@@ -6,8 +6,7 @@ require 'json'
 
 module Oculus
   class Server < Sinatra::Base
-
-#    register Sinatra::Warden
+    #    register Sinatra::Warden
 
     set :root, File.dirname(File.expand_path(__FILE__))
 
@@ -35,6 +34,10 @@ module Oculus
 
     get '/history' do
       #authorize!
+      to_delete = Oculus.data_store.one_off_queries
+      to_delete.each do |query|
+        Oculus.data_store.delete_query(query.id)
+      end
 
       @queries = Oculus.data_store.all_queries.map { |q| Oculus::Presenters::QueryPresenter.new(q) }
 

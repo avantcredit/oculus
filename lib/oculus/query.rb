@@ -60,6 +60,11 @@ module Oculus
       complete? && !error
     end
 
+    def one_off_query?
+      finished_at >= 24.hours.ago &&
+        (author.nil? || name.nil?)
+    end
+
     def to_csv
       CSV.generate do |csv|
         results.each do |row|

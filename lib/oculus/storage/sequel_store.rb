@@ -36,6 +36,12 @@ module Oculus
         end
       end
 
+      def one_off_queries
+        with_table do |table|
+          to_queries table.where(author: nil, name: nil).where("finished_at <= ?", 24.hours.ago)
+        end
+      end
+
       def save_query(query)
         attrs = serialize(query)
         with_table do |table|

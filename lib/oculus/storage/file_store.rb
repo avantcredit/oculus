@@ -21,6 +21,11 @@ module Oculus
         end.sort { |a,b| b.id <=> a.id }
       end
 
+      def one_off_queries
+        #Hack, we don't use this so i am not going to implement it
+        []
+      end
+
       def save_query(query)
         ensure_root_path
 
