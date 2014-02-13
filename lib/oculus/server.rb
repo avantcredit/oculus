@@ -35,6 +35,7 @@ module Oculus
 
     get '/history' do
       #authorize!
+
       @queries = Oculus.data_store.all_queries.map { |q| Oculus::Presenters::QueryPresenter.new(q) }
 
       erb :history
@@ -99,7 +100,7 @@ module Oculus
       @query = Oculus::Query.find(params[:id])
       connection = Oculus::Connection.connect(Oculus.connection_options)
       @query.execute(connection)
-      redirect to("/queries/#{@query.id}/status")
+      redirect to("/queries/#{@query.id}")
     end
 
     get '/queries/:id/status' do
@@ -116,6 +117,13 @@ module Oculus
       @query.save
 
       puts "true"
+    end
+
+    get '/queries/:id/edit' do
+      #authorize!
+      @query = Oculus::Query.find(params[:id])
+
+      erb :index
     end
 
     delete '/queries/:id' do

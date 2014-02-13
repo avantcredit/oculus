@@ -40,8 +40,8 @@
 
 <div id="query-sql-container">
   <div id="query-sql-actions">
-    <a class="btn btn-mini" href="<%= url("/?q=#{URI.escape(@query.query)}")%>"><i class="icon-edit"></i> Send to editor</a>
-    <a class="btn btn-mini" href="<%= url("/?q=#{URI.escape(@query.query)}&run=1")%>"><i class="icon-repeat"></i> Rerun</a>
+    <a class="btn btn-mini" href="<%= url("/queries/#{@query.id}/edit")%>"><i class="icon-edit"></i> Send to editor</a>
+    <a class="btn btn-mini" href="<%= url("/queries/#{@query.id}/run")%>"><i class="icon-repeat"></i> Rerun</a>
   </div>
   <pre class="cm-s-default"><%= @query.query %></pre>
 </div>

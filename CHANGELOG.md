@@ -1,3 +1,10 @@
+## 0.9.4 (Feb 13, 2014)
+
+Adding auto clean of one time queries
+
+* Any non named / non-author queries will be removed after configured time frame.
+* Update of run to return to query page with new results
+
 ## 0.9.3 (June 19, 2012)
 
 Breaking Changes:

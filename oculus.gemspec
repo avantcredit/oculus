@@ -2,8 +2,8 @@
 require File.expand_path('../lib/oculus/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Paul Rosania"]
-  gem.email         = ["paul.rosania@gmail.com"]
+  gem.authors       = ["Paul Rosania", "Robert R. Meyer"]
+  gem.email         = ["paul.rosania@gmail.com", "Blue.Dog.Archolite@gmail.com"]
   gem.description   = %q{Oculus is a web-based logging SQL client.  It keeps a history of your queries and the results they returned, so your research is always at hand, easy to share and easy to repeat or reproduce in the future.}
   gem.summary       = %q{Oculus is a web-based logging SQL client.}
   gem.homepage      = "http://oculusapp.com"
