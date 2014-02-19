@@ -38,7 +38,7 @@ module Oculus
 
       def one_off_queries
         with_table do |table|
-          to_queries table.where(author: nil, name: nil).where("finished_at >= ?", 24.hours.ago)
+          to_queries table.where("author = ? OR name = ?",nil, nil)
         end
       end
 
