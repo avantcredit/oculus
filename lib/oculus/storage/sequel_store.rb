@@ -30,6 +30,14 @@ module Oculus
         end
       end
 
+
+      def all_history_queries
+        with_table do |table|
+          to_queries table.select(:name, :author, :id, :query, :started_at).order(:id)
+        end
+      end
+
+
       def starred_queries
         with_table do |table|
           to_queries table.where(:starred => true).order(:id)
@@ -38,7 +46,7 @@ module Oculus
 
       def one_off_queries
         with_table do |table|
-          to_queries table.where(author: nil, name: nil).where("finished_at >= ?", 24.hours.ago)
+          to_queries table.where(author: nil, name: nil)
         end
       end
 

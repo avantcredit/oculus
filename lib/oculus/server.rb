@@ -36,10 +36,11 @@ module Oculus
       #authorize!
       to_delete = Oculus.data_store.one_off_queries
       to_delete.each do |query|
+        next unless query.finished_at <= 24.hours.ago
         Oculus.data_store.delete_query(query.id)
       end
 
-      @queries = Oculus.data_store.all_queries.map { |q| Oculus::Presenters::QueryPresenter.new(q) }
+      @queries = Oculus.data_store.all_history_queries.map { |q| Oculus::Presenters::QueryPresenter.new(q) }
 
       erb :history
     end
