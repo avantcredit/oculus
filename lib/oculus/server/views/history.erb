@@ -10,7 +10,7 @@
     <th></th>
   </thead>
   <tbody id="history">
-    <% @queries.each do |query| %>
+    <% @queries.queries.each do |query| %>
       <tr>
         <td class="status"><span class="indicator indicator-<%= query.status %>">*</span></td>
         <td class="date"><%= query.formatted_start_time %></td>
@@ -27,3 +27,8 @@
     <% end %>
   </tbody>
 </table>
+
+<% (1..(@queries.total.to_f / @queries.size.to_f).ceil).each do |i| %>
+  <a href="<%= url("/history?page=#{i}")%>">Page <%= i %></a>
+<% end %>
+

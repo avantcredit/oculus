@@ -30,10 +30,15 @@ module Oculus
         end
       end
 
-
-      def all_history_queries
+      def count
         with_table do |table|
-          to_queries table.select(:name, :author, :id, :query, :started_at).order(:id)
+          table.count
+        end
+      end
+
+      def all_history_queries(page)
+        with_table do |table|
+          to_queries table.select(:name, :author, :id, :query, :started_at, :finished_at, :error).order(:id).limit(20).offset(page * 20)
         end
       end
 
@@ -46,7 +51,7 @@ module Oculus
 
       def one_off_queries
         with_table do |table|
-          to_queries table.where(author: nil, name: nil)
+          to_queries table.select(:id, :finished_at).where(author: nil, name: nil)
         end
       end
 

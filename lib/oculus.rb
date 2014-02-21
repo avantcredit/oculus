@@ -2,6 +2,7 @@ require "oculus/version"
 require "oculus/storage"
 require "oculus/connection"
 require "oculus/query"
+require 'sinatra/paginate'
 
 module Oculus
   extend self

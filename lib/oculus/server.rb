@@ -2,11 +2,15 @@ require 'rubygems'
 require 'sinatra/base'
 require 'oculus'
 require 'oculus/presenters'
+require 'sinatra/paginate'
 require 'json'
+
+Struct.new('Result', :total, :size, :queries)
 
 module Oculus
   class Server < Sinatra::Base
     #    register Sinatra::Warden
+    register Sinatra::Paginate
 
     set :root, File.dirname(File.expand_path(__FILE__))
 
@@ -18,6 +22,12 @@ module Oculus
     helpers do
       include Rack::Utils
       alias_method :h, :escape_html
+    end
+
+    helpers do
+      def page
+        [params[:page].to_i - 1, 0].max
+      end
     end
 
     get '/' do
@@ -34,13 +44,18 @@ module Oculus
 
     get '/history' do
       #authorize!
-      to_delete = Oculus.data_store.one_off_queries
-      to_delete.each do |query|
-        next unless query.finished_at <= 24.hours.ago
-        Oculus.data_store.delete_query(query.id)
+      pid = fork do
+        to_delete = Oculus.data_store.one_off_queries
+        to_delete.each do |query|
+          next unless query.finished_at <= 24.hours.ago
+          Oculus.data_store.delete_query(query.id)
+        end
       end
 
-      @queries = Oculus.data_store.all_history_queries.map { |q| Oculus::Presenters::QueryPresenter.new(q) }
+      Process.detach(pid)
+
+      queries = Oculus.data_store.all_history_queries(page).map { |q| Oculus::Presenters::QueryPresenter.new(q) }
+      @queries = Struct::Result.new(Oculus.data_store.count, queries.count, queries)
 
       erb :history
     end

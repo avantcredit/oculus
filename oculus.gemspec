@@ -18,13 +18,15 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency "sinatra", [">= 1.3.0"]
   gem.add_runtime_dependency "vegas",   [">= 0.1.4"]
   gem.add_runtime_dependency "sequel",  [">= 3"]
+#  gem.add_runtime_dependency "will_paginate",  [">= 3"]
+  gem.add_runtime_dependency "sinatra-paginate",  [">= 0.1.0"]
 
   gem.add_development_dependency "rake"
   gem.add_development_dependency "cucumber", [">= 1"]
   gem.add_development_dependency "rspec",    [">= 2"]
   gem.add_development_dependency "capybara", [">= 1"]
 
-  gem.add_development_dependency "mysql2",  [">= 0.3.11"]
+#  gem.add_development_dependency "mysql2",  [">= 0.3.11"]
   gem.add_development_dependency "pg",      [">= 0.13.2"]
-  gem.add_development_dependency "sequel",  [">= 3"]
+#  gem.add_development_dependency "sequel",  [">= 3"]
 end
