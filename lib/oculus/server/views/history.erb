@@ -1,6 +1,10 @@
 <% @current_tab = 'history' %>
 
 <h2>Query History</h2>
+<div>
+  <h6>
+    <a href=<%= url('/clear_history')%>> Clear Old One Off Queries </a>
+  </h3>
 <table class="table">
   <thead>
     <th></th>
@@ -28,7 +32,11 @@
   </tbody>
 </table>
 
-<% (1..(@queries.total.to_f / @queries.size.to_f).ceil).each do |i| %>
+<h6>
+  Page <%= @page + 1 %> of <%= @total_pages %>
+</h6>
+
+<% (1..@total_pages).each do |i| %>
   <a href="<%= url("/history?page=#{i}")%>">Page <%= i %></a>
 <% end %>
 

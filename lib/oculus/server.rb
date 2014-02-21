@@ -42,20 +42,25 @@ module Oculus
       erb :starred
     end
 
-    get '/history' do
-      #authorize!
-      pid = fork do
+    get '/clear_history' do
         to_delete = Oculus.data_store.one_off_queries
         to_delete.each do |query|
           next unless query.finished_at <= 24.hours.ago
           Oculus.data_store.delete_query(query.id)
         end
-      end
 
-      Process.detach(pid)
+      redirect to("/history")
+    end
 
+
+    get '/history' do
+
+      total_queries = Oculus.data_store.count
       queries = Oculus.data_store.all_history_queries(page).map { |q| Oculus::Presenters::QueryPresenter.new(q) }
-      @queries = Struct::Result.new(Oculus.data_store.count, queries.count, queries)
+      @queries = Struct::Result.new(total_queries, queries.count, queries)
+
+      @page = page
+      @total_pages = (total_queries.to_f / queries.count.to_f).ceil
 
       erb :history
     end
