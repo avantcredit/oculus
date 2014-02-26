@@ -43,11 +43,16 @@ module Oculus
     end
 
     get '/clear_history' do
+
+      pid = fork do
         to_delete = Oculus.data_store.one_off_queries
         to_delete.each do |query|
           next unless query.finished_at <= 24.hours.ago
           Oculus.data_store.delete_query(query.id)
         end
+      end
+
+      Process.detach(pid)
 
       redirect to("/history")
     end
@@ -60,7 +65,7 @@ module Oculus
       @queries = Struct::Result.new(total_queries, queries.count, queries)
 
       @page = page
-      @total_pages = (total_queries.to_f / queries.count.to_f).ceil
+      @total_pages = (total_queries.to_f / 20.to_f).ceil
 
       erb :history
     end
