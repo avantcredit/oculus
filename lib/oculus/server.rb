@@ -59,7 +59,6 @@ module Oculus
 
 
     get '/history' do
-
       total_queries = Oculus.data_store.count
       queries = Oculus.data_store.all_history_queries(page).map { |q| Oculus::Presenters::QueryPresenter.new(q) }
       @queries = Struct::Result.new(total_queries, queries.count, queries)
@@ -75,6 +74,8 @@ module Oculus
       query = Oculus::Query.find(params[:id])
       connection = Oculus::Connection.connect(Oculus.connection_options)
       connection.kill(query.thread_id)
+      query.save
+
       [200, "OK"]
     end
 
@@ -82,13 +83,7 @@ module Oculus
       #authorize!
       query = Oculus::Query.create(:query => params[:query])
 
-      pid = fork do
-        query = Oculus::Query.find(query.id)
-        connection = Oculus::Connection.connect(Oculus.connection_options)
-        query.execute(connection)
-      end
-
-      Process.detach(pid)
+      execute_and_update(query.id)
 
       [201, { :id => query.id }.to_json]
     end
@@ -126,10 +121,9 @@ module Oculus
     end
 
     get '/queries/:id/run' do
-      @query = Oculus::Query.find(params[:id])
-      connection = Oculus::Connection.connect(Oculus.connection_options)
-      @query.execute(connection)
-      redirect to("/queries/#{@query.id}")
+      query = execute_and_update(params[:id])
+
+      redirect to("/queries/#{query.id}")
     end
 
     get '/queries/:id/status' do
@@ -159,6 +153,20 @@ module Oculus
       #authorize!
       Oculus.data_store.delete_query(params[:id])
       puts "true"
+    end
+
+    def execute_and_update(query_id)
+      @query = Oculus::Query.find(query_id)
+      pid = fork do
+        connection = Oculus::Connection.connect(Oculus.connection_options)
+        @query.execute(connection)
+      end
+
+      @query.thread_id = pid
+      @query.save
+
+      Process.detach(pid)
+      return @query
     end
   end
 end
