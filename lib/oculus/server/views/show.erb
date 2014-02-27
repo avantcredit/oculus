@@ -27,9 +27,13 @@
   <dt>Started at</dt>
   <dd><%= @query.formatted_start_time %></dd>
   <% if @query.finished_at %>
-  <dt>Finished at</dt>
-  <dd><%= @query.formatted_finish_time %> (<%= @query.elapsed_time %>)</dd>
+    <dt>Finished at</dt>
+    <dd><%= @query.formatted_finish_time %> (<%= @query.elapsed_time %>)</dd>
+  <% else %>
+    <dt>PID<dt>
+    <dd><%= @query.thread_id %>
   <% end %>
+
 </dl>
 
 <form class="well form-inline" id="query-properties-form">
