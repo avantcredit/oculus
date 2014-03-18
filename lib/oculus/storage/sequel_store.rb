@@ -90,8 +90,8 @@ module Oculus
             Integer :thread_id
             String :name
             String :author
-            String :query
-            String :results
+            Text :query
+            Text :results
             Time :started_at
             Time :finished_at
             TrueClass :starred
