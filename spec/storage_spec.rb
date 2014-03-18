@@ -14,6 +14,15 @@ describe Oculus::Storage do
       Oculus::Storage.create(:adapter => 'sequel')
     end
 
+    it "should modify query and results datatype to text format" do
+      storage = Oculus::Storage.create(:adapter => 'sequel', uri: "mysql2://root@localhost/oculus_test")
+      ["query", "results"].each do |field|
+        schema = storage.with_db {|db| db.schema storage.table_name}
+        column = schema.select {|column| column[0] == field.to_sym}.first
+        column[1][:db_type].should == "text"
+      end
+    end
+
     it "should forward its options to the storage" do
       opts = { :adapter => 'file' }
       Oculus::Storage::FileStore.should_receive(:new).with(opts)
