@@ -10,7 +10,7 @@ module Oculus
         raise ArgumentError, "URI is required" unless options[:uri]
         @uri = options[:uri]
         @table_name = options[:table] || :oculus
-        create_table
+        create_table       
       end
 
       def with_db
@@ -90,14 +90,16 @@ module Oculus
             Integer :thread_id
             String :name
             String :author
-            Text :query
-            Text :results
+            String :query
+            String :results
             Time :started_at
             Time :finished_at
             TrueClass :starred
             String :error
-          end
-        end
+          end                          
+          db.set_column_type @table_name.to_s, :query, :text
+          db.set_column_type @table_name.to_s, :results, :text        
+        end                
       end
 
       def drop_table
