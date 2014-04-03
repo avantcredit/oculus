@@ -61,6 +61,10 @@ body {
   color: grey;
 }
 
+.save-container{
+  float: right;
+}
+
 .status .indicator {
   text-indent: -9999px;
   display: inline-block;

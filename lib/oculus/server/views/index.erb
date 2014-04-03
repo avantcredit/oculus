@@ -1,13 +1,25 @@
 <% @current_tab = 'home' %>
 <% @sql = params[:q] || (@query ? @query.query : "" )%>
 
-<form id="query-form" method="POST" action="<%= url('/queries')%>">
+<form id="query-form" method="POST" data-id="<%= @query.id if @query%>" action="<%= url('/queries')%>">
+  <% if @query && @query.name %>
+    <div id="query-name">
+      <h1><%= "Editing: #{@query.name}" %></h1>
+      <br>
+    </div>
+  <% end %>
   <div id="editor-container">
     <textarea name="query" id="query-field"><%= h(@sql) %></textarea>
   </div>
-  <div class="form-actions">
+  <div class="form-actions">    
     <input type="submit" class="btn" name="submit" value="Run" />
     <span class="deemphasized help-inline"><abbr title="Ctrl+Enter">Ctrl+&crarr;</abbr> or <abbr title="Command+Enter">&#8984;&crarr;</abbr></span>
+    <% if @query %>
+      <span class="save-container hide">
+        <a class="btn save">Save Changes</a>
+        <a class="btn revert">Discard Changes</a>
+      </span>
+    <% end %>
   </div>
 </form>
 
@@ -27,11 +39,11 @@
 </div>
 
 <div id="results">
+
   <div class="alert alert-success">
     <strong>Success!</strong>
     Query returned <span class="row-count"></span> row<span class="row-count-plural">s</span>.
-  </div>
-
+  </div> 
   <table class="table table-condensed" id="results-table">
     <thead>
       <tr class="headers"></tr>
@@ -64,9 +76,11 @@
     onQueryStart: function() {
       $('#results, #error').hide();
       $('#loading').show();
+      $('.save-container').hide();      
     },
     onQuerySuccess: function(query) {
-      $('#loading, #error').hide();
+      $('#loading, #error').hide();      
+      $('.save-container').show();      
       $('#results')
         .show()
         .find('.row-count')
