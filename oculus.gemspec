@@ -26,7 +26,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "rspec",    [">= 2"]
   gem.add_development_dependency "capybara", [">= 1"]
 
-#  gem.add_development_dependency "mysql2",  [">= 0.3.11"]
-  gem.add_development_dependency "pg",      [">= 0.13.2"]
+ # gem.add_development_dependency "mysql2",  [">= 0.3.11"]
+ gem.add_development_dependency "pg",      [">= 0.13.2"]
 #  gem.add_development_dependency "sequel",  [">= 3"]
 end

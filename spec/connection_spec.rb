@@ -9,12 +9,12 @@ describe Oculus::Connection do
     end
   end
 
-  describe "mysql adapter option" do
-    it "returns a new instance of MySQL adapter" do
-      adapter = Oculus::Connection.connect adapter: 'mysql'
-      adapter.should be_an_instance_of Oculus::Connection::Mysql2
-    end
-  end
+  # describe "mysql adapter option" do
+  #   it "returns a new instance of MySQL adapter" do
+  #     adapter = Oculus::Connection.connect adapter: 'mysql'
+  #     adapter.should be_an_instance_of Oculus::Connection::Mysql2
+  #   end
+  # end
 
   describe "postgres adapter option" do
     it "returns a new instance of Postgres adapter" do

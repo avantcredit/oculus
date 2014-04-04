@@ -12,7 +12,7 @@ module Oculus
     #    register Sinatra::Warden
     register Sinatra::Paginate
 
-    set :root, File.dirname(File.expand_path(__FILE__))
+    set :root, File.dirname(__dir__)
 
     set :static, true
 
