@@ -52,6 +52,11 @@ module Oculus
       Oculus.data_store.save_query(self)
     end
 
+    def update(sql)
+      self.query = sql
+      self.save
+    end
+
     def complete?
       !!finished_at
     end

@@ -14,6 +14,22 @@ describe Oculus::Storage do
       Oculus::Storage.create(:adapter => 'sequel')
     end
 
+    it "should allow user to set query and results datatype" do
+      storage = Oculus::Storage.create(:adapter => 'sequel', uri: "mysql2://root@localhost/oculus_test")
+      storage.drop_table
+      storage.create_table
+      schema = storage.with_db {|db| db.schema storage.table_name}      
+      schema.select {|column| column[0] == :query}.first[1][:db_type].should == "varchar(255)"
+      schema.select {|column| column[0] == :results}.first[1][:db_type].should == "varchar(255)"      
+      storage.drop_table
+      storage = Oculus::Storage.create(:adapter => 'sequel', uri: "mysql2://root@localhost/oculus_test", 
+                                        query_format: :text, results_format: :longtext)
+      schema = storage.with_db {|db| db.schema storage.table_name}      
+      schema.select {|column| column[0] == :query}.first[1][:db_type].should == "text"
+      schema.select {|column| column[0] == :results}.first[1][:db_type].should == "longtext"
+      storage.drop_table
+    end
+
     it "should forward its options to the storage" do
       opts = { :adapter => 'file' }
       Oculus::Storage::FileStore.should_receive(:new).with(opts)

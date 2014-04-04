@@ -79,6 +79,13 @@ module Oculus
       [200, "OK"]
     end
 
+    post '/queries/:id/update' do
+      #authorize!      
+      @query = Oculus::Query.find(params[:id])
+      @query.update(params[:query])
+      redirect to("/queries/#{@query.id}")
+    end 
+
     post '/queries' do
       #authorize!
       query = Oculus::Query.create(:query => params[:query])
