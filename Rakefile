@@ -67,3 +67,5 @@ namespace :db do
 end
 
 task :default => [:spec, :cucumber]
+require 'jasmine'
+load 'jasmine/tasks/jasmine.rake'
